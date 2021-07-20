@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    image:
+      postgres:latest
+    container_name: db
+    expose:
+      - "5432"
+    volumes:
+      - ./sql_scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=devices
+      - POSTGRES_PASSWORD=postgres
+  app:
+    build:
+      context: .
+    container_name: app
+    ports:
+    - "8080:8080"
+    depends_on:
+      - db
